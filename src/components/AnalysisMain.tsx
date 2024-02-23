@@ -1,45 +1,38 @@
     "use client"
-    import type { NextApiRequest, NextApiResponse } from 'next'
-    
-    import React, { useEffect, useState } from 'react';
-    import { Project, Workspace } from "epanet-js";
+   // Import necessary modules and types
+   import React, { useEffect, useState } from 'react';
 
-    interface AnalysisMainProps {
-        fileContent: string;
-    }
-
-    const AnalysisMain: React.FC<AnalysisMainProps> = ({ fileContent, }) => {
-        const [analysisResults, setAnalysisResults] = useState<string | null>(null);
-
-        useEffect(() => {
-            if (!fileContent) return;
-        
-            const runAnalysisOnServer = async () => {
-            try {
-                const response = await fetch('/api/epanetAnalysis', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ inpFileContent: fileContent }),
-                });
-        
-                if (!response.ok) throw new Error('Network response was not ok.');
-        
-                const data = await response.json();
-                setAnalysisResults(data.message); // Adjust based on your API response
-            } catch (error) {
-                console.error("Error during analysis:", error);
-                if (error instanceof Error) {
-                  setAnalysisResults(error.message);
-                } else {
-                  setAnalysisResults("An unexpected error occurred during analysis.");
-                }
-              }
-            };
-        
-            runAnalysisOnServer();
-        }, [fileContent]);
-        // Re-run analysis when fileContent changes
-
+   interface AnalysisMainProps {
+       fileContent: string;
+   }
+   
+   const AnalysisMain: React.FC<AnalysisMainProps> = ({ fileContent }) => {
+       const [analysisResults, setAnalysisResults] = useState<string | null>(null);
+   
+       useEffect(() => {
+           if (!fileContent) return;
+   
+           const runAnalysisOnServer = async () => {
+               try {
+                   const response = await fetch('/api/epanetAnalysis', {
+                       method: 'POST',
+                       headers: { 'Content-Type': 'application/json' },
+                       body: JSON.stringify({ inpFileContent: fileContent }),
+                   });
+   
+                   if (!response.ok) throw new Error('Network response was not ok.');
+   
+                   const data = await response.json();
+                   setAnalysisResults(data.results);
+               } catch (error) {
+                   console.error("Error during analysis:", error);
+                   setAnalysisResults("An error occurred during analysis.");
+               }
+           };
+   
+           runAnalysisOnServer();
+       }, [fileContent]);
+       
             const mainContentStyle: React.CSSProperties = {
                 display: 'flex',
                 justifyContent: 'center', // Centering the card horizontally
@@ -77,9 +70,7 @@
                         <h1 style={cardHeaderStyle}>Analysis</h1>
                         <div style={cardContentStyle}>
                             {analysisResults ? 
-                                // Display analysis results if available
                                 <pre>{analysisResults}</pre> :
-                                // Otherwise, display the file content or a loading message
                                 <pre>{fileContent || "Loading analysis..."}</pre>
                             }
                         </div>
@@ -87,5 +78,5 @@
                 </div>
             );
         };
-
+        
         export default AnalysisMain;
