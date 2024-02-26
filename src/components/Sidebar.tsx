@@ -133,8 +133,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onFileProcessed }) =
     <>
       <div style={sidebarStyle}>
         <h1 style={headerStyle}>iTANK</h1>
-        <h2 style={headerStyle}>Model View</h2>
-        <p style={textStyle}>Share and view models in the browser.</p>
+     
+        <p style={textStyle}>Analyze Epanet File .inp</p>
   
         {/* Apply the combined styles to this div */}
         <div
@@ -145,7 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onFileProcessed }) =
           onDrop={handleDrop}
         >
           Drop EPANET .inp file here
-          <p>All data is processed client side, no model data sent to the server.</p>
+          {/* <p>All data is processed client side, no model data sent to the server.</p> */}
         </div>
         {/* <button style={buttonStyle}>LOAD DEMO MODEL</button> */}
         {/* Additional sidebar content would go here */}
