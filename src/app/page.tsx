@@ -1,31 +1,31 @@
 "use client"
-// Assuming you're using Next.js or a similar setup
 import React, { useState } from 'react';
-import Sidebar from '@/components/Sidebar'; // Adjust the import path as needed
-import AnalysisMain from '@/components/AnalysisMain'; // Adjust the import path as needed
-import * as EPANET from 'epanet-js';
-
+import Sidebar from '@/components/Sidebar';
+import AnalysisMain from '@/components/AnalysisMain';
+import WaterNetworkMap from '@/components/WaterNetworkMap';
+import { toGeoJson } from '@/utils/epanetToGeoJson'; // Adjust the import path as needed
+import Buttom from '@/components/Buttom';
+import Analysis from '@/components/Analysis';
 
 export default function Home() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [fileContent, setFileContent] = useState<string | null>(null);
+  const [geoJsonData, setGeoJsonData] = useState<GeoJSON.FeatureCollection>();
 
-  // Function to toggle Sidebar
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-  // Function to handle the processed file content
   const handleFileProcessed = (content: string) => {
-    setFileContent(content);
-    // Optionally, close the sidebar here if desired
-    // setSidebarOpen(false);
+    const convertedGeoJson = toGeoJson(content);
+    setGeoJsonData(convertedGeoJson);
+    setFileContent(content); // Optional, if you still need the raw content
   };
 
   return (
     <main className="">
-      {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} onFileProcessed={handleFileProcessed} />
-
-      {/* Conditionally render AnalysisMain or other components based on fileContent */}
+      <Analysis />
+      <WaterNetworkMap geoJsonData={geoJsonData} />
+      {/* <Buttom /> */}
       {fileContent && <AnalysisMain fileContent={fileContent} />}
     </main>
   );

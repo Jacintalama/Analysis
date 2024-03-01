@@ -35,8 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onFileProcessed }) =
         const reader = new FileReader();
         reader.onload = () => {
           if (reader.result) {
-            // Make sure to check that onFileProcessed is defined before calling it
-            onFileProcessed(reader.result.toString());
+            onFileProcessed(reader.result.toString()); // Pass the processed file content to the parent component
           }
         };
         reader.readAsText(droppedFile);
@@ -52,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onFileProcessed }) =
   } : {};
   
   const sidebarStyle: React.CSSProperties = {
-    width: isOpen ? '750px' : '0',
+    width: isOpen ? '30%' : '0',
     height: '100%',
     position: 'fixed',
     zIndex: 100,
@@ -91,20 +90,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onFileProcessed }) =
     marginBottom: '1.5em',
   };
 
-  const buttonStyle: React.CSSProperties = {
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    padding: '10px 15px',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    marginBottom: '1em',
-  };
+
 
   const toggleButtonStyle: React.CSSProperties = {
     position: 'absolute',
     top: '50%',
-    left: isOpen ? '730px' : '-5px',
+    left: isOpen ? '29%' : '-5px',
     transform: 'translateY(-50%)',
     zIndex: 101,
     cursor: 'pointer',
